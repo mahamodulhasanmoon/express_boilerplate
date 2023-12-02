@@ -8,7 +8,7 @@
     "dev": "nodemon src/index.ts",
     "lint:fix":"npx eslint src --fix",
     "lint": "eslint src --ignore-path .eslintignore --ext .ts",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "format": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -1,6 +1,6 @@
 import { connect } from 'mongoose';
 
-export async function connectMongoDB(uri:string) {
+export async function connectMongoDB(uri: string) {
   try {
     await connect(uri as string);
   } catch (error) {
