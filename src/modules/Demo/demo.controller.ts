@@ -1,8 +1,15 @@
 import { Request, Response } from "express";
+import { DemoValidationSchema } from "./demo.validation";
+
 
 export const createDemoController = async(req:Request,res:Response)=>{
 try {
-    const data = req.body
+
+// creating a schema validation using Zod
+
+
+    const data = DemoValidationSchema.parse(req.body)
+
 
     res.status(200).json({
         status:200,
