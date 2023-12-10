@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from 'express';
+import httstatus from 'http-status';
 interface NotFoundError extends Error {
   status: number;
 }
@@ -26,14 +29,18 @@ export const errorHandler = (
   error: NotFoundError,
   _req: Request,
   res: Response,
+  next:NextFunction
 ) => {
-  if (error.status) {
-    res.status(error.status).json({
-      message: error?.message,
-    });
-  }
+  if ('status' in error) {
+   return res.status(error.status).json({
+      message: error?.message || 'something went wrong',
+      status:error.status,
+      error: error
 
-  res
+    });
+  }  
+
+ return res
     .status(500)
-    .json({ status: error.status, message: error.message, error: error });
+    .json({ status: (error as any).status, message: (error as any).message, error: error });
 };
