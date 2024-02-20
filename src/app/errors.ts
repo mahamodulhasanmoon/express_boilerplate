@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from 'express';
-import httstatus from 'http-status';
+
 interface NotFoundError extends Error {
   status: number;
 }
@@ -26,7 +26,7 @@ export const notFoundHandler = (
 };
 
 export const errorHandler = (
-  error: NotFoundError,
+  error: any,
   _req: Request,
   res: Response,
   next:NextFunction
@@ -39,6 +39,25 @@ export const errorHandler = (
 
     });
   }  
+
+  if(error.name === 'CastError') {
+
+    return res.status(error.status).json({
+      message: `resource not Found in ${error.path}`,
+      status:error.status,
+      error: error
+
+    });
+  }
+  if(error.code  === 1100) {
+
+    return res.status(error.status).json({
+      message: `Duplicate ${Object.keys(error.keyValue)} Entered`,
+      status:error.status,
+      error: error
+
+    });
+  }
 
  return res
     .status(500)
