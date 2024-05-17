@@ -2,14 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response, NextFunction } from 'express';
 
-interface NotFoundError extends Error {
-  status: number;
-}
-
 export class CustomError extends Error {
-  status: number;
-
-  constructor(message: string, status: number) {
+  constructor(
+    public message: string,
+    public status: number,
+  ) {
     super(message);
     this.status = status;
   }
@@ -29,37 +26,36 @@ export const errorHandler = (
   error: any,
   _req: Request,
   res: Response,
-  next:NextFunction
+  next: NextFunction,
 ) => {
   if ('status' in error) {
-   return res.status(error.status).json({
+    return res.status(error.status).json({
       message: error?.message || 'something went wrong',
-      status:error.status,
-      error: error
-
+      status: error.status,
+      error: error,
     });
-  }  
+  }
 
-  if(error.name === 'CastError') {
-
+  if (error.name === 'CastError') {
     return res.status(error.status).json({
       message: `resource not Found in ${error.path}`,
-      status:error.status,
-      error: error
-
+      status: error.status,
+      error: error,
     });
   }
-  if(error.code  === 1100) {
-
+  if (error.code === 1100) {
     return res.status(error.status).json({
       message: `Duplicate ${Object.keys(error.keyValue)} Entered`,
-      status:error.status,
-      error: error
-
+      status: error.status,
+      error: error,
     });
   }
 
- return res
+  return res
     .status(500)
-    .json({ status: (error as any).status, message: (error as any).message, error: error });
+    .json({
+      status: (error as any).status,
+      message: (error as any).message,
+      error: error,
+    });
 };

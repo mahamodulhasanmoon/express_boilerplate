@@ -1,5 +1,5 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-export const demoRoutes = Router()
+export const demoRoutes = Router();
 
-demoRoutes.post('/demo')
+demoRoutes.post('/demo');
