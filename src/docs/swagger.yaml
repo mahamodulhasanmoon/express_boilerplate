@@ -9,10 +9,11 @@ info:
     email: mahamodulhasan.moon@gmail.com
     url: https://mahamodulhasan.me
   license:
-    name: Apachi
-    url: https://apachi.com
+    name: Apache License, Version 2.0
+    url: https://apache.com
 servers:
-  - url: https://localhost:8000/api/v1
+  - description: Development
+    url: https://localhost:8000/api/v1
 tags:
   - name: HealthChecks
     description: public Api Endpoints  And Autentation Perpose
@@ -93,6 +94,57 @@ paths:
                         type: string
                         example: /auth/signup
                       signin:
+                        type: string
+                        example: /auth/login
+
+        '400':
+          $ref: '#/components/responses/400'
+  /auth/login:
+    post:
+      description: For Login Any User
+      tags: [Authentications]
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: mahamodulhasan.moon@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: password123
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Logged in Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Logged in Successfully
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: iIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                  links:
+                    type: object
+                    properties:
+                      self:
                         type: string
                         example: /auth/login
 
