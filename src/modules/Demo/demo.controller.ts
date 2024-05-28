@@ -1,23 +1,19 @@
-import { Request, Response } from 'express';
-import { DemoValidationSchema } from './demo.validation';
+import {  RequestHandler } from 'express';
+import { sendResponse } from '../../utils/sendResponse';
+import { catchAsync } from '../../utils/catchAsync';
+import { createDemoService } from './demo.service';
+import { IDemo } from './demo.interface';
 
-export const createDemoController = async (req: Request, res: Response) => {
-  try {
-    // creating a schema validation using Zod
+export const createStudentController: RequestHandler = catchAsync(
+  async (req, res) => {
 
-    const data = DemoValidationSchema.parse(req.body);
-
-    res.status(200).json({
-      status: 200,
+    const demoData:IDemo = req.body;
+    const result  = await createDemoService(demoData);
+    sendResponse(res, {
+      status: 201,
       success: true,
       message: 'successfully created demo',
-      data: data,
+      data: result,
     });
-  } catch (error: any) {
-    res.status(error.status).json({
-      status: error.status,
-      success: false,
-      message: error.message,
-    });
-  }
-};
+  },
+);

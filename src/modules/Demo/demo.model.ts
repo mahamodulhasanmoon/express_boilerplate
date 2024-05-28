@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import { IDemo } from './demo.interface';
 
 const demoSchema = new Schema<IDemo>({
-  id: {
+  email: {
     type: String,
     required: true,
   },

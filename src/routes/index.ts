@@ -5,7 +5,7 @@ type IModulerRoutes = [{ path: string; route: Router }];
 
 export const modulerRoutes: IModulerRoutes = [
   {
-    path: '/student',
+    path: '/demo',
     route: demoRoutes,
   },
 ];
