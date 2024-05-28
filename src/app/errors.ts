@@ -51,11 +51,9 @@ export const errorHandler = (
     });
   }
 
-  return res
-    .status(500)
-    .json({
-      status: (error as any).status,
-      message: (error as any).message,
-      error: error,
-    });
+  return res.status(500).json({
+    status: (error as any).status,
+    message: (error as any).message,
+    error: error,
+  });
 };
