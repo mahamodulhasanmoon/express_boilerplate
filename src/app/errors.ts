@@ -1,59 +1,104 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response, NextFunction } from 'express';
+/* eslint-disable no-unused-vars */
+import { ErrorRequestHandler } from 'express';
+import { ZodError } from 'zod';
+import { TErrors } from '../interfaces/error.interface';
+import { handleZodError } from '../errors/zodError';
+import { CustomError } from '../errors/CustomError';
+import { NODE_ENV } from '../config';
+import {
+  mongooseCastError,
+  mongooseValidationError,
+} from '../errors/validation.mongoose.error';
+import { handleDuplicateError } from '../errors/duplicateErrors';
 
-export class CustomError extends Error {
-  constructor(
-    public message: string,
-    public status: number,
-  ) {
-    super(message);
-    this.status = status;
+/**
+ * =========================== === === Global Error === === =====================
+ */
+
+export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
+  let status = 500;
+  let message = 'Something went wrong';
+  const success = false;
+  let stackTrace: any = NODE_ENV === 'development' ? error.stack : null;
+  let errors: TErrors = [
+    {
+      path: req.url,
+      message: 'Something went wrong',
+    },
+  ];
+  /**
+   * =========================== === === Custom  Error === === =====================
+   */
+
+  //  Final Error
+
+  if (error instanceof Error) {
+    message = error.message;
+    errors = [
+      {
+        path: '',
+        message: error?.message,
+      },
+    ];
   }
-}
 
-export const notFoundHandler = (
-  _req: Request,
-  _res: Response,
-  next: NextFunction,
-) => {
-  const error: Error = new CustomError('Resource not found', 404);
-
-  next(error);
-};
-
-export const errorHandler = (
-  error: any,
-  _req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  if ('status' in error) {
-    return res.status(error.status).json({
-      message: error?.message || 'something went wrong',
-      status: error.status,
-      error: error,
-    });
+  if (error instanceof CustomError) {
+    status = error.status;
+    message = error.message;
+    errors = [
+      {
+        path: '',
+        message: error?.message,
+      },
+    ];
   }
+
+  /**
+   * =========================== === === CAST  Error === === =====================
+   */
 
   if (error.name === 'CastError') {
-    return res.status(error.status).json({
-      message: `resource not Found in ${error.path}`,
-      status: error.status,
-      error: error,
-    });
-  }
-  if (error.code === 1100) {
-    return res.status(error.status).json({
-      message: `Duplicate ${Object.keys(error.keyValue)} Entered`,
-      status: error.status,
-      error: error,
-    });
+    status = 400;
+    message = `Invalid ID`;
+    const simplified = mongooseCastError(error);
+    errors = simplified;
   }
 
-  return res.status(500).json({
-    status: (error as any).status,
-    message: (error as any).message,
-    error: error,
-  });
+  /**
+   * =========================== === === Zod  Error === === =====================
+   */
+
+  if (error instanceof ZodError) {
+    status = 400;
+    message = `Validation Error`;
+    stackTrace = error.stack
+      ? { ...stackTrace, stack: error.stack }
+      : stackTrace;
+    const simplified = handleZodError(error);
+
+    errors = simplified;
+  }
+
+  /**
+   * =========================== === === MOngoose   Error === === =====================
+   */
+
+  if (error.name === 'ValidationError') {
+    status = 400;
+    message = `Validation Error`;
+    const simplified = mongooseValidationError(error);
+    errors = simplified;
+  }
+
+  if (error.code === 11000) {
+    status = 400;
+    message = `Data Duplication Error`;
+    const simplified = handleDuplicateError(error);
+    errors = simplified;
+  }
+
+  return res
+    .status(status)
+    .json({ status, success, message, errors, error, stackTrace });
 };
