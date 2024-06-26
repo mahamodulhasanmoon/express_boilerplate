@@ -1,5 +1,5 @@
 {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
-    "workbench.colorTheme": "Tomorrow Night Blue"
+    "workbench.colorTheme": "Snazzy Operator"
 }

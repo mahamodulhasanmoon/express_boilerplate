@@ -5,16 +5,18 @@ interface IResponse<T> {
   success: boolean;
   message?: string;
   data?: T;
+  token?: string;
 }
 
 export const sendResponse = <T>(
   res: Response,
-  { data, message, status, success }: IResponse<T>,
+  { data, message, status, success, token }: IResponse<T>,
 ) => {
   return res.status(status).json({
-    status: status,
-    success: success,
-    message: message,
-    data: data,
+    status,
+    success,
+    message,
+    data,
+    token,
   });
 };

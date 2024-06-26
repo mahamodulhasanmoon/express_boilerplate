@@ -1,11 +1,15 @@
 import { Router } from 'express';
-import { demoRoutes } from '../modules/Demo/demo.routes';
+import { userRoutes } from '../modules/user/user.routes';
+import { authRoutes } from '../modules/auth/auth.routes';
 
-type IModulerRoutes = [{ path: string; route: Router }];
+type IModulerRoutes = { path: string; route: Router }[];
 
 export const modulerRoutes: IModulerRoutes = [
   {
-    path: '/demo',
-    route: demoRoutes,
-  },
+    path: '/user',
+    route: userRoutes,
+  },{
+    path: '/auth',
+    route: authRoutes,
+  }
 ];
