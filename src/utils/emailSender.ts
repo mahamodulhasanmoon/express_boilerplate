@@ -1,13 +1,16 @@
 import nodemailer from 'nodemailer';
 import ejs from 'ejs';
 import path from 'path';
-import { mailHost, mailPass, mailService, mailUser } from '../config';
+import { frontendUrl, mailHost, mailPass, mailService, mailUser } from '../config';
 
-export const sendMail = async (email: any, subject: any, data: any) => {
+export const sendMail = async (email: any, subject: any, data: any,templete?:string) => {
   try {
     const html: string = await ejs.renderFile(
-      path.join(__dirname, '..', 'views', 'email.ejs'),
-      { data: data },
+      path.join(__dirname, '..', 'views', `${templete ? templete : 'email'}.ejs`),
+      { data: data,
+        subject,
+        frontendUrl
+       },
     );
     const transporter = nodemailer.createTransport({
       host: mailHost,

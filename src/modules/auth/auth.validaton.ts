@@ -30,7 +30,6 @@ export const createUserValidation = z.object({
   }),
 });
 
-
 // For Activation 
 
 export const  activateUserValidation = z.object({

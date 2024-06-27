@@ -4,7 +4,9 @@ import { activateUserValidation, createUserValidation, loginValidation } from '.
 import {
   activateAccountController,
   createUserController,
+  forgetPasswordController,
   loginController,
+  logoutController,
   refreshController,
 } from './auth.controller';
 
@@ -34,3 +36,11 @@ authRoutes.get(
   '/refresh',
   refreshController,
 );
+
+
+authRoutes.post(
+  '/forgot-password',
+  forgetPasswordController,
+);
+
+authRoutes.get('/logout',logoutController)

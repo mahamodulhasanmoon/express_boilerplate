@@ -4,6 +4,7 @@ import { IUser } from '../user/user.interface';
 import jwt from 'jsonwebtoken';
 import {
   createUserService,
+  forgetPasswordService,
   loginService,
   prepareForActivateService,
   refreshTokenService,
@@ -100,5 +101,40 @@ export const refreshController: RequestHandler = catchAsync(async (req, res) => 
     success: true,
     message: 'Access token is retrieved succesfully!',
     token: result,
+  });
+});
+
+/**
+ *  === ============= === Password Management  For Reset And Forget  === ---- === ===
+ */
+
+export const forgetPasswordController:RequestHandler = catchAsync(async(req,res)=>{
+
+  
+const token = await forgetPasswordService(req.body)
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: 'Please Check Your Email To Reset Your Password',
+   token
+  });
+})
+
+
+
+
+
+export const logoutController: RequestHandler = catchAsync(async (req, res) => {
+
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+
+  sendResponse(res, {
+    status: httpStatus.OK,
+    success: true,
+    message: 'logout Successfully',
+    // token: result,
+    // data: req.session
   });
 });
