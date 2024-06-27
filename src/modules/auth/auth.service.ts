@@ -6,6 +6,7 @@ import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
 import { ILogin, TJwtPayload } from './auth.interface';
 import { genarateToken } from '../../utils/genarateToken';
+
 import {
   access_token,
   access_token_expiry,
@@ -160,4 +161,52 @@ export const forgetPasswordService = async (payload: Partial<IUser>) => {
     'reset',
   );
   return resetToken;
+};
+
+// Password Resetting Service
+
+export const resetPasswordPasswordService = async (
+  token: string,
+  payload: Partial<IUser>,
+) => {
+  const decoded: Partial<IUser & JwtPayload> = jwt.verify(
+    token,
+    access_token,
+  ) as JwtPayload;
+
+
+
+  await User.updatePassword(decoded.email as string,payload)
+  // await User.findOneAndUpdate(
+  //   {
+  //     email: user.email,
+  //   },
+  //   {
+  //     password: payload.password,
+  //     needsPasswordChange: false,
+  //     passwordChangedAt: new Date(),
+  //   },
+  // );
+
+  // const jwtPayload: TJwtPayload = {
+  //   userId: (user as any)._id,
+  //   email: user.email,
+  //   name: user.username,
+  //   role: user.role,
+  //   username: user.username,
+  // };
+
+  // const resetToken = genarateToken(
+  //   jwtPayload,
+  //   access_token,
+  //   access_token_expiry,
+  // );
+  // const resetUILink = `reset-password?email=${user.email}&token=${resetToken} `
+  // await sendMail(
+  //   payload.email,
+  //   'Password Reset',
+  //   { ...payload, token: resetToken },
+  //   'reset',
+  // );
+  // return resetToken;
 };

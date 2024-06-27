@@ -8,6 +8,7 @@ import {
   loginService,
   prepareForActivateService,
   refreshTokenService,
+  resetPasswordPasswordService,
 } from './auth.service';
 import { sendResponse } from '../../utils/sendResponse';
 import httpStatus from 'http-status';
@@ -114,6 +115,19 @@ export const forgetPasswordController: RequestHandler = catchAsync(
       status: httpStatus.OK,
       success: true,
       message: 'Please Check Your Email To Reset Your Password',
+      token,
+    });
+  },
+);
+export const resetPasswordController: RequestHandler = catchAsync(
+  async (req, res) => {
+   const token  = req.query.token as string
+     await resetPasswordPasswordService(token,req.body);
+
+    sendResponse(res, {
+      status: httpStatus.OK,
+      success: true,
+      message: 'password Reset Successfully',
       token,
     });
   },

@@ -12,6 +12,7 @@ import {
   loginController,
   logoutController,
   refreshController,
+  resetPasswordController,
 } from './auth.controller';
 
 export const authRoutes: Router = Router();
@@ -35,5 +36,6 @@ authRoutes.post('/login', requestValidator(loginValidation), loginController);
 authRoutes.get('/refresh', refreshController);
 
 authRoutes.post('/forgot-password', forgetPasswordController);
+authRoutes.post('/reset-password', resetPasswordController);
 
 authRoutes.get('/logout', logoutController);

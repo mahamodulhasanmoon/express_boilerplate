@@ -66,7 +66,14 @@ userSchema.statics.isUserExists = async function (payload) {
   });
   return existingUser;
 };
-
+userSchema.statics.updatePassword = async function (email: string, payload: Partial<IUser>) {
+  const user = await this.findOne({email});
+  if (!user) {
+    throw new Error('User not found');
+  }
+  (user as any).password = payload.password
+  await user.save();
+}
 userSchema.methods.comparePassword = function (password: string) {
   return bcrypt.compareSync(password, this.password);
 };
