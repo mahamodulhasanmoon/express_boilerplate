@@ -175,36 +175,5 @@ export const resetPasswordPasswordService = async (
   ) as JwtPayload;
 
   await User.updatePassword(decoded.email as string, payload);
-  // await User.findOneAndUpdate(
-  //   {
-  //     email: user.email,
-  //   },
-  //   {
-  //     password: payload.password,
-  //     needsPasswordChange: false,
-  //     passwordChangedAt: new Date(),
-  //   },
-  // );
 
-  // const jwtPayload: TJwtPayload = {
-  //   userId: (user as any)._id,
-  //   email: user.email,
-  //   name: user.username,
-  //   role: user.role,
-  //   username: user.username,
-  // };
-
-  // const resetToken = genarateToken(
-  //   jwtPayload,
-  //   access_token,
-  //   access_token_expiry,
-  // );
-  // const resetUILink = `reset-password?email=${user.email}&token=${resetToken} `
-  // await sendMail(
-  //   payload.email,
-  //   'Password Reset',
-  //   { ...payload, token: resetToken },
-  //   'reset',
-  // );
-  // return resetToken;
 };
