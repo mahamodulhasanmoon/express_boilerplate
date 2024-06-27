@@ -78,6 +78,7 @@ userSchema.statics.updatePassword = async function (
   await user.save();
 };
 userSchema.methods.comparePassword = function (password: string) {
+  console.log(password,'password');
   return bcrypt.compareSync(password, this.password);
 };
 userSchema.post('save', function (doc, next) {

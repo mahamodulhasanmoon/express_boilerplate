@@ -177,3 +177,27 @@ export const resetPasswordPasswordService = async (
   await User.updatePassword(decoded.email as string, payload);
 
 };
+export const changePasswordService = async (userData:Partial<IUser> |  JwtPayload,
+  payload: any,
+) => {
+const payData:Partial<IUser> = {
+  email: userData.email
+}
+const user = await User.findOne({ email: payData.email }).select('+password');
+  // Check User Exist Or not
+  if (!user) {
+    throw new CustomError(404, 'User not exists please create an account');
+  }
+  //   Check User Is Deleted Or not
+
+  //   check Passsword Is Valid or Not
+
+  const isPasswordValid = (user as any).comparePassword(payload.oldPassword);
+
+  if (!isPasswordValid) {
+    throw new CustomError(httpStatus.FORBIDDEN, 'Invalid UserID or Password');
+  }
+
+  await User.updatePassword((user as any).email as string, payload);
+
+};

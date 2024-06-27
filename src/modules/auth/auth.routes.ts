@@ -7,6 +7,7 @@ import {
 } from './auth.validaton';
 import {
   activateAccountController,
+  changePasswordController,
   createUserController,
   forgetPasswordController,
   loginController,
@@ -14,6 +15,7 @@ import {
   refreshController,
   resetPasswordController,
 } from './auth.controller';
+import auth from '../../middlewares/auth';
 
 export const authRoutes: Router = Router();
 
@@ -36,6 +38,7 @@ authRoutes.post('/login', requestValidator(loginValidation), loginController);
 authRoutes.get('/refresh', refreshController);
 
 authRoutes.post('/forgot-password', forgetPasswordController);
-authRoutes.post('/reset-password', resetPasswordController);
+authRoutes.patch('/reset-password', resetPasswordController);
+authRoutes.patch('/change-password',auth('user','admin','subadmin') ,changePasswordController);
 
 authRoutes.get('/logout', logoutController);

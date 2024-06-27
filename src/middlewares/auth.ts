@@ -49,15 +49,6 @@ const auth = (...requiredRoles: IUserRole[]) => {
         throw new CustomError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
       }
 
-      // if (
-      //   user.passwordChangedAt &&
-      //   User.isJWTIssuedBeforePasswordChanged(
-      //     user.passwordChangedAt,
-      //     iat as number,
-      //   )
-      // ) {
-      //   throw new CustomError(httpStatus.UNAUTHORIZED, 'You are not authorized !');
-      // }
 
       if (requiredRoles && !requiredRoles.includes(role)) {
         throw new CustomError(
