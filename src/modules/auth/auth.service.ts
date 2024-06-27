@@ -153,6 +153,11 @@ export const forgetPasswordService = async (payload: Partial<IUser>) => {
     access_token_expiry,
   );
   // const resetUILink = `reset-password?email=${user.email}&token=${resetToken} `
-  await sendMail(payload.email, 'Password Reset', { ...payload,token:resetToken },'reset');
-  return resetToken
+  await sendMail(
+    payload.email,
+    'Password Reset',
+    { ...payload, token: resetToken },
+    'reset',
+  );
+  return resetToken;
 };

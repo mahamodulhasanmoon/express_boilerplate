@@ -6,7 +6,6 @@ import { getUserService, updateUserService } from './user.service';
 
 export const getUserController: RequestHandler = catchAsync(
   async (req, res) => {
-
     const result = await getUserService(req.user.userId);
     sendResponse(res, {
       status: httpStatus.OK,

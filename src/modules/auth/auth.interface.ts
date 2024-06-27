@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export interface  IActivationCode {
+export interface IActivationCode {
   token: string;
   code: number;
 }
@@ -16,5 +16,4 @@ export type TJwtPayload = {
   name: string;
   username: string;
   role: string;
- 
 };

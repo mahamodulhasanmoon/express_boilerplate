@@ -8,8 +8,9 @@ export const modulerRoutes: IModulerRoutes = [
   {
     path: '/user',
     route: userRoutes,
-  },{
+  },
+  {
     path: '/auth',
     route: authRoutes,
-  }
+  },
 ];

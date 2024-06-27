@@ -19,51 +19,48 @@ export const createUserController: RequestHandler = catchAsync(
   async (req, res) => {
     const payload: IUser = req.body;
 
-const {token} = await prepareForActivateService(payload)
+    const { token } = await prepareForActivateService(payload);
     sendResponse(res, {
       status: httpStatus.CREATED,
       success: true,
       message: 'Please Check Your Email To Activate your Account',
-      token
+      token,
     });
   },
 );
 
 export const activateAccountController: RequestHandler = catchAsync(
   async (req, res) => {
-    const { code,activationToken } = req.body;
+    const { code, activationToken } = req.body;
     const newUser = jwt.verify(
       activationToken,
       access_token as string,
     ) as JwtPayload;
- 
-    if(!newUser ){
-      throw new CustomError(404,'User Not Found')
+
+    if (!newUser) {
+      throw new CustomError(404, 'User Not Found');
     }
-    if(newUser.code.toString() !== code.toString()){
-      throw new CustomError(httpStatus.UNAUTHORIZED,'Invalid Code')
+    if (newUser.code.toString() !== code.toString()) {
+      throw new CustomError(httpStatus.UNAUTHORIZED, 'Invalid Code');
     }
-    const formated: IUser = Object.keys(newUser).reduce((obj:any, key) => {
+    const formated: IUser = Object.keys(newUser).reduce((obj: any, key) => {
       if (key !== 'iat' && key !== 'exp' && key !== 'code') {
-          obj[key] = newUser[key];
+        obj[key] = newUser[key];
       }
       return obj;
-  }, {} as IUser);
-  
-  const  {result,token} :any =await  createUserService(formated)
+    }, {} as IUser);
 
- 
+    const { result, token }: any = await createUserService(formated);
 
     sendResponse(res, {
       status: httpStatus.CREATED,
       success: true,
       message: 'Account activated successfully',
-      data:result,
-      token:token
+      data: result,
+      token: token,
     });
   },
 );
-
 
 // Account creation Part  End
 
@@ -74,7 +71,6 @@ export const activateAccountController: RequestHandler = catchAsync(
 export const loginController: RequestHandler = catchAsync(async (req, res) => {
   const payload: IUser = req.body;
   const { refreshToken, accessToken, rest } = await loginService(payload);
-
 
   res.cookie('refreshToken', refreshToken, {
     secure: NODE_ENV === 'production',
@@ -93,40 +89,37 @@ export const loginController: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-export const refreshController: RequestHandler = catchAsync(async (req, res) => {
-  const { refreshToken } = req.cookies;
-  const result = await refreshTokenService(refreshToken);
-  sendResponse(res, {
-    status: httpStatus.OK,
-    success: true,
-    message: 'Access token is retrieved succesfully!',
-    token: result,
-  });
-});
+export const refreshController: RequestHandler = catchAsync(
+  async (req, res) => {
+    const { refreshToken } = req.cookies;
+    const result = await refreshTokenService(refreshToken);
+    sendResponse(res, {
+      status: httpStatus.OK,
+      success: true,
+      message: 'Access token is retrieved succesfully!',
+      token: result,
+    });
+  },
+);
 
 /**
  *  === ============= === Password Management  For Reset And Forget  === ---- === ===
  */
 
-export const forgetPasswordController:RequestHandler = catchAsync(async(req,res)=>{
+export const forgetPasswordController: RequestHandler = catchAsync(
+  async (req, res) => {
+    const token = await forgetPasswordService(req.body);
 
-  
-const token = await forgetPasswordService(req.body)
-
-  sendResponse(res, {
-    status: httpStatus.OK,
-    success: true,
-    message: 'Please Check Your Email To Reset Your Password',
-   token
-  });
-})
-
-
-
-
+    sendResponse(res, {
+      status: httpStatus.OK,
+      success: true,
+      message: 'Please Check Your Email To Reset Your Password',
+      token,
+    });
+  },
+);
 
 export const logoutController: RequestHandler = catchAsync(async (req, res) => {
-
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
 

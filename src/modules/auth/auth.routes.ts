@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { requestValidator } from '../../middlewares/requestValidator';
-import { activateUserValidation, createUserValidation, loginValidation } from './auth.validaton';
+import {
+  activateUserValidation,
+  createUserValidation,
+  loginValidation,
+} from './auth.validaton';
 import {
   activateAccountController,
   createUserController,
@@ -22,25 +26,14 @@ authRoutes.post(
   requestValidator(activateUserValidation),
   activateAccountController,
 );
-authRoutes.post(
-  '/login',
-  requestValidator(loginValidation),
-  loginController,
-);
+authRoutes.post('/login', requestValidator(loginValidation), loginController);
 // authRoutes.get(
 //   '/me',
 //   auth('admin','subadmin','user'),
 //   getMe,
 // );
-authRoutes.get(
-  '/refresh',
-  refreshController,
-);
+authRoutes.get('/refresh', refreshController);
 
+authRoutes.post('/forgot-password', forgetPasswordController);
 
-authRoutes.post(
-  '/forgot-password',
-  forgetPasswordController,
-);
-
-authRoutes.get('/logout',logoutController)
+authRoutes.get('/logout', logoutController);

@@ -4,5 +4,5 @@ import auth from '../../middlewares/auth';
 
 export const userRoutes: Router = Router();
 
-userRoutes.get('/me', auth('admin', 'user','subadmin'), getUserController);
+userRoutes.get('/me', auth('admin', 'user', 'subadmin'), getUserController);
 // userRoutes.put('/me', auth('admin', 'user'), updateUserController);
