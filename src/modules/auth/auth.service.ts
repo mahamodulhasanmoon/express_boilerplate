@@ -174,9 +174,7 @@ export const resetPasswordPasswordService = async (
     access_token,
   ) as JwtPayload;
 
-
-
-  await User.updatePassword(decoded.email as string,payload)
+  await User.updatePassword(decoded.email as string, payload);
   // await User.findOneAndUpdate(
   //   {
   //     email: user.email,

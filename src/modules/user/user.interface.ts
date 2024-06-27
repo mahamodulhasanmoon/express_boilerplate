@@ -18,7 +18,7 @@ export interface IUserMethod {
 export interface IUserModel
   extends Model<IUser, Record<string, never>, IUserMethod> {
   isUserExists(payload: Partial<IUser>): Promise<IUser | null>;
-  updatePassword(id:string, password: Partial<IUser>): Promise<IUser | null>;
+  updatePassword(id: string, password: Partial<IUser>): Promise<IUser | null>;
 }
 
 export type IUserRole = keyof typeof USER_ROLE;

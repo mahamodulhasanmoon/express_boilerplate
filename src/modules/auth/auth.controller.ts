@@ -121,8 +121,8 @@ export const forgetPasswordController: RequestHandler = catchAsync(
 );
 export const resetPasswordController: RequestHandler = catchAsync(
   async (req, res) => {
-   const token  = req.query.token as string
-     await resetPasswordPasswordService(token,req.body);
+    const token = req.query.token as string;
+    await resetPasswordPasswordService(token, req.body);
 
     sendResponse(res, {
       status: httpStatus.OK,
